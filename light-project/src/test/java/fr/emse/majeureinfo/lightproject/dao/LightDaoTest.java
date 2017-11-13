@@ -38,7 +38,7 @@ public class LightDaoTest {
 
     protected static final DbSetupTracker TRACKER = new DbSetupTracker();
 
-    private static final Operation DELETE_ALL = DeleteAll.from("light");
+    private static final Operation DELETE_ALL = DeleteAll.from("ROOM","LIGHT","NOISE");
 
     protected void dbSetup(Operation operation) {
         DbSetup setup = new DbSetup(new DataSourceDestination(dataSource),
