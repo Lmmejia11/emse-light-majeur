@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface RoomDaoCostom {
 
-    public Room findWithOnLight();
+    public List<Room> findWithOnLight();
 }

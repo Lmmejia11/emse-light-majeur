@@ -3,12 +3,9 @@ package fr.emse.majeureinfo.lightproject.controller;
 import fr.emse.majeureinfo.lightproject.dao.springdao.RoomDao;
 import fr.emse.majeureinfo.lightproject.dao.springdao.LightDao;
 import fr.emse.majeureinfo.lightproject.dto.RoomDto;
-import fr.emse.majeureinfo.lightproject.model.Light;
 import fr.emse.majeureinfo.lightproject.model.Room;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -32,13 +29,12 @@ public class RoomController {
     }
 
     @RequestMapping(value="/api/rooms/{id}", method =RequestMethod.GET)
-    public Room get(Long id){
+    public Room get(@PathVariable Long id){
         return roomDao.getOne(id);
     }
 
     @RequestMapping(value="/api/rooms/{id}/switch", method =RequestMethod.GET)
-    public Room switchLight(Long id){
-        return null; // TODO
+    public Room switchLight(@PathVariable Long id){ return null; // TODO
     }
 
     @RequestMapping(value="/api/rooms/{id}/ringer", method =RequestMethod.GET)
@@ -48,7 +44,7 @@ public class RoomController {
 
     @RequestMapping(value="/api/rooms/on", method =RequestMethod.GET)
     public List<RoomDto> listWithOnLight() {
-        return null; // TODO
+        return roomDao.findWithOnLight().stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
 }

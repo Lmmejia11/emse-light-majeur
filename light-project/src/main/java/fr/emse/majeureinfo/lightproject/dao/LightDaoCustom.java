@@ -8,6 +8,6 @@ import java.util.List;
 public interface LightDaoCustom {
 
   public List<Light> findOnLights();
-  //public void switchLight();
+  public void switchLight(Long id);
 
 }
