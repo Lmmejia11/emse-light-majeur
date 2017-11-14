@@ -15,10 +15,10 @@ public class Room {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Light light;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Noise noise;
 
     public Room(){}
@@ -50,5 +50,29 @@ public class Room {
 
     public Noise getNoise() {
         return noise;
+    }
+
+    public void switchLight(){
+        Light.Status state = light.getStatus();
+        switch (state){
+            case ON:
+                light.setStatus(Light.Status.OFF);
+                break;
+            case OFF:
+                light.setStatus(Light.Status.ON);
+                break;
+        }
+    }
+
+    public void switchRinger(){
+        Light.Status state = noise.getStatus();
+        switch (state){
+            case ON:
+                noise.setStatus(Light.Status.OFF);
+                break;
+            case OFF:
+                noise.setStatus(Light.Status.ON);
+                break;
+        }
     }
 }

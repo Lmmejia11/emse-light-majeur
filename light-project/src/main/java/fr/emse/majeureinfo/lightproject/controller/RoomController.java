@@ -4,8 +4,10 @@ import fr.emse.majeureinfo.lightproject.dao.springdao.RoomDao;
 import fr.emse.majeureinfo.lightproject.dao.springdao.LightDao;
 import fr.emse.majeureinfo.lightproject.dto.RoomDto;
 import fr.emse.majeureinfo.lightproject.model.Room;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -16,11 +18,9 @@ import java.util.stream.Collectors;
 public class RoomController {
 
     private final RoomDao roomDao;
-    private final LightDao lightDao;
 
     public RoomController(RoomDao roomDao, LightDao lightDao) {
         this.roomDao = roomDao;
-        this.lightDao = lightDao;
     }
 
     @RequestMapping(value="/api/rooms", method = RequestMethod.GET)
@@ -29,17 +29,22 @@ public class RoomController {
     }
 
     @RequestMapping(value="/api/rooms/{id}", method =RequestMethod.GET)
-    public Room get(@PathVariable Long id){
-        return roomDao.getOne(id);
+    public RoomDto get(Long id){
+        return new RoomDto(roomDao.getOne(id));
     }
 
-    @RequestMapping(value="/api/rooms/{id}/switch", method =RequestMethod.GET)
-    public Room switchLight(@PathVariable Long id){ return null; // TODO
+    @RequestMapping(value="/api/rooms/{id}/switch-light", method =RequestMethod.GET)
+    public RoomDto switchLight(@PathVariable("id") Long id){
+        Room room = roomDao.getOne(id);
+        room.switchLight();
+        return new RoomDto(room);
     }
 
-    @RequestMapping(value="/api/rooms/{id}/ringer", method =RequestMethod.GET)
-    public Room switchRinger(Long id){
-        return null; // TODO
+    @RequestMapping(value="/api/rooms/{id}/switch-ringer", method =RequestMethod.GET)
+    public RoomDto switchRinger(Long id){
+        Room room = roomDao.getOne(id);
+        room.switchRinger();
+        return new RoomDto(room);
     }
 
     @RequestMapping(value="/api/rooms/on", method =RequestMethod.GET)
