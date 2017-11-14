@@ -1,0 +1,7 @@
+
+machine api.heroku.com
+  password b875e774-f88f-48ab-8a31-c14bdb9f80ce
+  login linamaria.lopez@etu.emse.fr
+machine git.heroku.com
+  password b875e774-f88f-48ab-8a31-c14bdb9f80ce
+  login linamaria.lopez@etu.emse.fr
