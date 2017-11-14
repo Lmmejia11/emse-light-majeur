@@ -55,7 +55,6 @@ public class Light {
         this.status = status;
     }
 
-
     public static enum Status {
         ON, OFF;
     }

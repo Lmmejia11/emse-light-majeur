@@ -5,7 +5,6 @@ import fr.emse.majeureinfo.lightproject.model.Light;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.Collections;
 import java.util.List;
 
 public class LightDaoImpl implements LightDaoCustom {
@@ -19,5 +18,13 @@ public class LightDaoImpl implements LightDaoCustom {
         TypedQuery<Light> query = em.createQuery(jpql, Light.class);
         return query.setParameter("value", Light.Status.ON)
                 .getResultList();
+    }
+
+    @Override
+    public void switchLight(Long id) {
+        String jpql = "select lt from Light lt where lt.id = :value";
+        TypedQuery<Light> query = em.createQuery(jpql, Light.class);
+        query.setParameter("value", id).getResultList();
+        // TODO
     }
 }

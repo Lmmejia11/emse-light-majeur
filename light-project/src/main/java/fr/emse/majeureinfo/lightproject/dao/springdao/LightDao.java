@@ -1,5 +1,6 @@
-package fr.emse.majeureinfo.lightproject.dao;
+package fr.emse.majeureinfo.lightproject.dao.springdao;
 
+import fr.emse.majeureinfo.lightproject.dao.LightDaoCustom;
 import fr.emse.majeureinfo.lightproject.model.Light;
 import org.springframework.data.jpa.repository.JpaRepository;
 

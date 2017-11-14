@@ -7,6 +7,7 @@ import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.operation.DeleteAll;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
+import fr.emse.majeureinfo.lightproject.dao.springdao.LightDao;
 import fr.emse.majeureinfo.lightproject.model.Light;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +63,6 @@ public class LightDaoTest {
         TRACKER.skipNextLaunch();
         assertEquals(lightDao.findOnLights().size(),1);
     }
-
 
 
 }
