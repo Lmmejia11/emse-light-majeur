@@ -1,7 +1,6 @@
 package fr.emse.majeureinfo.lightproject.controller;
 
 import fr.emse.majeureinfo.lightproject.dao.springdao.RoomDao;
-import fr.emse.majeureinfo.lightproject.dao.springdao.LightDao;
 import fr.emse.majeureinfo.lightproject.dto.RoomDto;
 import fr.emse.majeureinfo.lightproject.model.Room;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,7 @@ public class RoomController {
 
     private final RoomDao roomDao;
 
-    public RoomController(RoomDao roomDao, LightDao lightDao) {
+    public RoomController(RoomDao roomDao) {
         this.roomDao = roomDao;
     }
 

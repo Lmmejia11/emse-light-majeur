@@ -1,6 +1,5 @@
 package fr.emse.majeureinfo.lightproject.dao;
 
-import fr.emse.majeureinfo.lightproject.dao.RoomDaoCostom;
 import fr.emse.majeureinfo.lightproject.model.Light;
 import fr.emse.majeureinfo.lightproject.model.Room;
 
@@ -17,7 +16,8 @@ public class RoomDaoImpl implements RoomDaoCostom {
 
     @Override
     public List<Room> findWithOnLight() {
-        String jpql = "select rm from Room rm where rm.Light.status = :value";
+        //String jpql = "select rm from Room rm where rm.Light.status = :value";
+        String jpql = "select rm from Room rm where rm.light.status = :value";
         TypedQuery<Room> query = em.createQuery(jpql, Room.class);
         return query.setParameter("value", Light.Status.ON)
                 .getResultList();
