@@ -29,7 +29,7 @@ public class RoomController {
     }
 
     @RequestMapping(value="/api/rooms/{id}", method =RequestMethod.GET)
-    public RoomDto get(Long id){
+    public RoomDto get(@PathVariable("id") Long id){
         return new RoomDto(roomDao.getOne(id));
     }
 
@@ -41,7 +41,7 @@ public class RoomController {
     }
 
     @RequestMapping(value="/api/rooms/{id}/switch-ringer", method =RequestMethod.GET)
-    public RoomDto switchRinger(Long id){
+    public RoomDto switchRinger(@PathVariable("id") Long id){
         Room room = roomDao.getOne(id);
         room.switchRinger();
         return new RoomDto(room);
