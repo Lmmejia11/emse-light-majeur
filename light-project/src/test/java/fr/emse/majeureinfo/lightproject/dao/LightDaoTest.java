@@ -60,8 +60,7 @@ public class LightDaoTest {
     @Test
     public void shouldFindOnLights() {
         TRACKER.skipNextLaunch();
-        // TODO assertEquals(lightDao.findOnLights().size,1);
-        assertEquals(lightDao.findAll().size(),1);
+        assertEquals(lightDao.findOnLights().size(),1);
     }
 
 
