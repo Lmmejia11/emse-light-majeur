@@ -35,22 +35,29 @@ public class RoomController {
     }
 
     @PostMapping(value="/api/rooms/{id}/switch-light")
-    public RoomDto switchLight(@PathVariable("id") Long id){
-        Room room = roomDao.getOne(id);
-        room.switchLight();
-        return new RoomDto(room);
+    public List<RoomDto> switchLight(@PathVariable("id") Long id){
+        List<Room> rooms = roomDao.findAll();
+        findRoomWithId(rooms,id).switchLight();
+        return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
     @PostMapping(value="/api/rooms/{id}/switch-ringer")
-    public RoomDto switchRinger(@PathVariable("id") Long id){
-        Room room = roomDao.getOne(id);
-        room.switchRinger();
-        return new RoomDto(room);
+    public List<RoomDto> switchRinger(@PathVariable("id") Long id){
+        List<Room> rooms = roomDao.findAll();
+        findRoomWithId(rooms,id).switchRinger();
+        return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
     @GetMapping(value="/api/rooms/on")
     public List<RoomDto> listWithOnLight() {
         return roomDao.findWithOnLight().stream().map(RoomDto::new).collect(Collectors.toList());
+    }
+
+    private Room findRoomWithId(List<Room> rooms, Long id){
+        for (Room r: rooms){
+            if ( r.getId() == id) {return r;}
+        }
+        return null;
     }
 
 }

@@ -58,10 +58,10 @@
         },
         methods: {
             switchLight: function (room) {
-                axios.post(apiRooms + "/"+room.id+"/switch-light").then(function (result) { this.room = result.data });
+                axios.post(apiRooms + "/"+room.id+"/switch-light").then( result => { this.rooms = result.data });
             },
             switchNoise: function (room) {
-                axios.post(apiRooms + "/"+room.id+"/switch-ringer").then(function (result) { this.room = result.data });
+                axios.post(apiRooms + "/"+room.id+"/switch-ringer").then( result => { this.rooms = result.data });
             }
         }
 
