@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Transactional
+@RequestMapping("/api/rooms")
 public class RoomController {
 
     private final RoomDao roomDao;
@@ -24,31 +25,31 @@ public class RoomController {
         this.roomDao = roomDao;
     }
 
-    @GetMapping(value="/api/rooms")
+    @GetMapping
     public List<RoomDto> list() {
         return roomDao.findAll().stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    @GetMapping(value="/api/rooms/{id}")
+    @GetMapping(value="/{id}")
     public RoomDto get(@PathVariable("id") Long id){
         return new RoomDto(roomDao.getOne(id));
     }
 
-    @PostMapping(value="/api/rooms/{id}/switch-light")
+    @PostMapping(value="/{id}/switch-light")
     public List<RoomDto> switchLight(@PathVariable("id") Long id){
         List<Room> rooms = roomDao.findAll();
         findRoomWithId(rooms,id).switchLight();
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value="/api/rooms/{id}/switch-ringer")
+    @PostMapping(value="/{id}/switch-ringer")
     public List<RoomDto> switchRinger(@PathVariable("id") Long id){
         List<Room> rooms = roomDao.findAll();
         findRoomWithId(rooms,id).switchRinger();
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    @GetMapping(value="/api/rooms/on")
+    @GetMapping(value="/on")
     public List<RoomDto> listWithOnLight() {
         return roomDao.findWithOnLight().stream().map(RoomDto::new).collect(Collectors.toList());
     }
