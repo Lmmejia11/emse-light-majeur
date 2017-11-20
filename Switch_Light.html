@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<head>
+    <<meta charset="UTF-8">
+    <title>Light controller Web page</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+
+<body>
+
+<div class="container" id="app">
+    <h1 class="text-center">Light Controller</h1>
+    <ol>Choisir N° de room :
+        <select v-model="selected">
+            <option v-for="room in roomsLightOn" v-bind:id="room.id">
+                {{ room.id }}
+            </option>
+        </select>
+    </ol>
+    <span>room choisi : {{selected}}</span>
+    <p> Cliquer pour éteindre la lumière du room choisi: <button v-on:click="switchLight(room,selected)">Submit</button></p>
+</div>
+
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+
+<script>
+    var apiRooms = 'https://glacial-plateau-99461.herokuapp.com/api/rooms';
+    var app = new Vue({
+        el: '#app',
+        data: {
+            selected: '',
+            roomsLightOn: []
+        },
+        mounted(){
+            axios.get(apiRooms + "/on").then(response => {this.roomsLightOn = response.data});
+        },
+        methods: {
+            switchLight: function (room, selected) {
+                axios.post(apiRooms + "/"+selected+"/switch-light").then( result => { this.rooms = result.data });
+            }
+        }
+
+    });
+</script>
+
+
+</body>
+
+
+</html>
