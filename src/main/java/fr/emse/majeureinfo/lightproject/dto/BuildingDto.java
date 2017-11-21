@@ -10,18 +10,18 @@ import java.util.List;
 public class BuildingDto {
 
     private Long id;
+    private String name;
     private List<Room> rooms;
 
     public BuildingDto(Building building){
         this.id = building.getId();
         this.rooms = building.getRooms();
+        this.name = building.getName();
     }
 
-    public Long getId() {
-        return id;
-    }
-
+    public Long getId() {     return id;  }
     public List<Room> getRooms() {
         return rooms;
     }
+    public String getName() {    return name;    }
 }

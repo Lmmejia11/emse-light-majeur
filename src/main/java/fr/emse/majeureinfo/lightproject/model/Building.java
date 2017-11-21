@@ -1,6 +1,7 @@
 package fr.emse.majeureinfo.lightproject.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,11 @@ public class Building {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "room_ids", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column
+    private String name;
+
+    @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name="ROOMS_ID")
     private List<Room> rooms;
 
     public Building() {
@@ -40,4 +45,8 @@ public class Building {
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
+
+    public String getName() {  return name;   }
+
+    public void setName(String name) {  this.name = name;  }
 }
