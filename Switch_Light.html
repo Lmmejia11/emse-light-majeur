@@ -14,6 +14,13 @@
 
 <div class="container" id="app">
     <h1 class="text-center">Light Controller</h1>
+    <ol>Choose Rooms with light :
+        <select v-model="modality" v-bind:modality="option">
+            <option>ON</option>
+            <option>OFF</option>
+        </select>
+    </ol>
+    <span>Chosen modality: {{modality}}</span>
     <ol>Choisir N° de room :
         <select v-model="selected">
             <option v-for="room in roomsLightOn" v-bind:id="room.id">

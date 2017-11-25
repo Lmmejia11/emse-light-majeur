@@ -23,4 +23,14 @@ public class RoomDaoImpl implements RoomDaoCostom {
                 .getResultList();
 
     }
+
+    @Override
+    public List<Room> findWithOffLight() {
+        //String jpql = "select rm from Room rm where rm.Light.status = :value";
+        String jpql = "select rm from Room rm where rm.light.status = :value";
+        TypedQuery<Room> query = em.createQuery(jpql, Room.class);
+        return query.setParameter("value", Light.Status.OFF)
+                .getResultList();
+
+    }
 }

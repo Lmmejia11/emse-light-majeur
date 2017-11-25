@@ -54,6 +54,11 @@ public class RoomController {
         return roomDao.findWithOnLight().stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
+    @GetMapping(value="/off")
+    public List<RoomDto> listWithOffLight() {
+        return roomDao.findWithOffLight().stream().map(RoomDto::new).collect(Collectors.toList());
+    }
+
     private Room findRoomWithId(List<Room> rooms, Long id){
         for (Room r: rooms){
             if ( r.getId() == id) {return r;}
