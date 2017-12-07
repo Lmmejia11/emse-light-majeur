@@ -31,4 +31,5 @@ dependencies {
 	compile('com.h2database:h2')										//Local database
 	testCompile('com.ninja-squad:DbSetup:2.1.0')						// Library to help test DAOs
 	compile("com.heroku.sdk:heroku-jdbc:0.1.1")							// Simple free cloud API
+	compile ("org.hibernate:hibernate-core:5.2.8.Final")				//Criteria for queries
 }
