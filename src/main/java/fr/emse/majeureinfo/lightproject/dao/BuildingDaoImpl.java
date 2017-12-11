@@ -13,14 +13,16 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class BuildingDaoImpl {
+public class BuildingDaoImpl implements BuildingDaoCustom {
 
     @PersistenceContext
     private EntityManager em;
 
     public List<Building> listBuildingsLightOn() {
 
-        String jpql = "select bd from Building bd where lt.status = :value";
+        String jpql = "select bd "+
+                "from Building as bd left join bd.rooms as rm "+
+                "where rm.light.status = :value";
         TypedQuery<Building> query = em.createQuery(jpql, Building.class);
         return query.setParameter("value", Light.Status.ON)
                 .getResultList();
@@ -28,30 +30,11 @@ public class BuildingDaoImpl {
 
     public List<BuildingDetailDto> listBuildingsDetails() {
 
-        String jpql = "select db.id as id, db.name as name, count(db.rooms) as n_rooms from Building bd group by db.id";
+        String jpql = "select new fr.emse.majeureinfo.lightproject.dto.BuildingDetailDto(bd.id, bd.name , count(rm)) "+
+                "from Building as bd left join bd.rooms as rm group by bd.id";
+
         TypedQuery<BuildingDetailDto> query = em.createQuery(jpql, BuildingDetailDto.class);
         return query.getResultList();
     }
-
-    /*public List<BuildingDetailDto> listBuildingsDetails() {
-
-        DetachedCriteria queryLightOn = DetachedCriteria.forClass(Building.class)
-                .setProjection( Projections.rowCount() )
-                .add( Restrictions.eq("rooms.light.status", Light.Status.ON) );
-        DetachedCriteria queryNoiseOn = DetachedCriteria.forClass(Building.class)
-                .setProjection( Projections.rowCount() )
-                .add( Restrictions.eq("rooms.noise.status", Light.Status.ON) );
-
-        TypedQuery<BuildingDetailDto> query = session.createCriteria(Building.class)
-                .setProjection( Projections.projectionList()
-                        .add( Projections.rowCount() )
-                        .add(queryLightOn)
-                        .add(queryNoiseOn)
-                        .add( Projections.groupProperty("rooms.id") )
-                )
-                .setProjection( Projections.alias( Projections.groupProperty(""), "colr" ) )
-        return query.setParameter("value", Light.Status.ON)
-                .getResultList();
-    }*/
 
 }

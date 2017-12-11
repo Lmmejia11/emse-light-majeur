@@ -9,6 +9,7 @@ import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.emse.majeureinfo.lightproject.dao.springdao.BuildingDao;
 import fr.emse.majeureinfo.lightproject.dao.springdao.LightDao;
+import fr.emse.majeureinfo.lightproject.dto.BuildingDetailDto;
 import fr.emse.majeureinfo.lightproject.model.Light;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class BuildingDaoTest {
 
     protected static final DbSetupTracker TRACKER = new DbSetupTracker();
 
-    private static final Operation DELETE_ALL = DeleteAll.from("BUIDING","ROOM","LIGHT","NOISE");
+    private static final Operation DELETE_ALL = DeleteAll.from("BUILDING_ROOMS","BUILDING","ROOM","LIGHT","NOISE");
 
     protected void dbSetup(Operation... operations) {
 
@@ -71,13 +72,17 @@ public class BuildingDaoTest {
                         .values(1L, 22).build();
         Operation room =
                 Insert.into("ROOM")
-                        .withDefaultValue("status", Light.Status.ON)
-                        .columns("id", "light","noise")
+                        .columns("id", "light_id", "noise_id")
                         .values(1L, 1L,1L).build();
         Operation building =
                 Insert.into("BUILDING")
-                        .columns("id", "name","rooms")
-                        .values(1L, "TestBuilding", 1L)
+                        .columns("id", "name")
+                        .values(1L, "TestBuilding")
+                        .build();
+        Operation building_r =
+                Insert.into("BUILDING_ROOMS")
+                        .columns("building_id", "room_id")
+                        .values(1L, 1L)
                         .build();
 
         dbSetup(light,noise,room,building);
@@ -86,7 +91,20 @@ public class BuildingDaoTest {
     @Test
     public void shouldFindOnLights() {
         TRACKER.skipNextLaunch();
-        assertEquals(buildingDao.findAll().size(),1);
+        assertEquals(1,buildingDao.listBuildingsLightOn().size());
+    }
+
+    @Test
+    public void shouldFindDetails() {
+        TRACKER.skipNextLaunch();
+        List<BuildingDetailDto> a = buildingDao.listBuildingsDetails();
+        assertEquals(1,buildingDao.listBuildingsDetails().size());
+    }
+
+    @Test
+    public void shouldFindAll() {
+        TRACKER.skipNextLaunch();
+        assertEquals(1,buildingDao.findAll().size());
     }
 
 

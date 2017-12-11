@@ -13,9 +13,13 @@ public class BuildingDetailDto {
     private int n_rooms;
 
     public BuildingDetailDto(Building building){
-        this.id = building.getId();
-        this.name = building.getName();
-        this.n_rooms = building.getRooms().size() ;
+        this(building.getId(),building.getName(),building.getRooms().size()) ; }
+    public BuildingDetailDto(Long id, String name, Long n_rooms) {
+        this(id,name,n_rooms.intValue());   }
+    public BuildingDetailDto(Long id, String name, int n_rooms) {
+        this.id = id;
+        this.name = name;
+        this.n_rooms = n_rooms;
     }
 
     public Long getId() {
