@@ -22,6 +22,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -42,9 +46,14 @@ public class BuildingDaoTest {
 
     private static final Operation DELETE_ALL = DeleteAll.from("BUIDING","ROOM","LIGHT","NOISE");
 
-    protected void dbSetup(Operation operation) {
+    protected void dbSetup(Operation... operations) {
+
+        List<Operation> ops = new ArrayList<>();
+        ops.add(DELETE_ALL);
+        ops.addAll(Arrays.asList(operations));
+
         DbSetup setup = new DbSetup(new DataSourceDestination(dataSource),
-                Operations.sequenceOf(DELETE_ALL, operation));
+                Operations.sequenceOf(ops));
         TRACKER.launchIfNecessary(setup);
     }
 
@@ -54,9 +63,24 @@ public class BuildingDaoTest {
                 Insert.into("LIGHT")
                         .withDefaultValue("status", Light.Status.ON)
                         .columns("id", "level")
-                        .values(1L, 22)
+                        .values(1L, 22).build();
+        Operation noise =
+                Insert.into("NOISE")
+                        .withDefaultValue("status", Light.Status.ON)
+                        .columns("id", "level")
+                        .values(1L, 22).build();
+        Operation room =
+                Insert.into("ROOM")
+                        .withDefaultValue("status", Light.Status.ON)
+                        .columns("id", "light","noise")
+                        .values(1L, 1L,1L).build();
+        Operation building =
+                Insert.into("BUILDING")
+                        .columns("id", "name","rooms")
+                        .values(1L, "TestBuilding", 1L)
                         .build();
-        dbSetup(light);
+
+        dbSetup(light,noise,room,building);
     }
 
     @Test
