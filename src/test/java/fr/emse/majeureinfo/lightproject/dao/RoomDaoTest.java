@@ -8,6 +8,7 @@ import com.ninja_squad.dbsetup.operation.DeleteAll;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.emse.majeureinfo.lightproject.dao.springdao.LightDao;
+import fr.emse.majeureinfo.lightproject.dao.springdao.RoomDao;
 import fr.emse.majeureinfo.lightproject.model.Light;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,10 +29,10 @@ import static org.junit.Assert.assertEquals;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource("/test.properties")
-public class LightDaoTest {
+public class RoomDaoTest {
 
     @Autowired
-    private LightDao lightDao;
+    private RoomDao roomDao;
 
     @Qualifier("dataSource")
     @Autowired
@@ -41,9 +42,9 @@ public class LightDaoTest {
 
     private static final Operation DELETE_ALL = DeleteAll.from("ROOM","LIGHT","NOISE");
 
-    protected void dbSetup(Operation operation) {
+    protected void dbSetup(Operation light, Operation noise, Operation room) {
         DbSetup setup = new DbSetup(new DataSourceDestination(dataSource),
-                Operations.sequenceOf(DELETE_ALL, operation));
+                Operations.sequenceOf(DELETE_ALL, light, noise, room));
         TRACKER.launchIfNecessary(setup);
     }
 
@@ -55,13 +56,24 @@ public class LightDaoTest {
                         .columns("id", "level")
                         .values(1L, 22)
                         .build();
-        dbSetup(light);
+        Operation noise =
+                Insert.into("NOISE")
+                        .withDefaultValue("status", Light.Status.ON)
+                        .columns("id", "level")
+                        .values(1L, 22)
+                        .build();
+        Operation room =
+                Insert.into("ROOM")
+                        .columns("id", "light_id", "noise_id")
+                        .values(1L, 1L, 1L)
+                        .build();
+        dbSetup(light, noise, room);
     }
 
     @Test
     public void shouldFindOnLights() {
         TRACKER.skipNextLaunch();
-        assertEquals(1,lightDao.findOnLights().size());
+        assertEquals(1,roomDao.findWithOnLight().size());
     }
 
 
