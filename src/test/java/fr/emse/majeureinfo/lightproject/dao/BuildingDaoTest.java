@@ -7,7 +7,9 @@ import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.operation.DeleteAll;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
+import fr.emse.majeureinfo.lightproject.dao.springdao.BuildingDao;
 import fr.emse.majeureinfo.lightproject.dao.springdao.LightDao;
+import fr.emse.majeureinfo.lightproject.dto.BuildingDetailDto;
 import fr.emse.majeureinfo.lightproject.model.Light;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +23,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -28,10 +34,10 @@ import static org.junit.Assert.assertEquals;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource("/test.properties")
-public class LightDaoTest {
+public class BuildingDaoTest {
 
     @Autowired
-    private LightDao lightDao;
+    private BuildingDao buildingDao;
 
     @Qualifier("dataSource")
     @Autowired
@@ -41,9 +47,14 @@ public class LightDaoTest {
 
     private static final Operation DELETE_ALL = DeleteAll.from("BUILDING_ROOMS","BUILDING","ROOM","LIGHT","NOISE");
 
-    protected void dbSetup(Operation operation) {
+    protected void dbSetup(Operation... operations) {
+
+        List<Operation> ops = new ArrayList<>();
+        ops.add(DELETE_ALL);
+        ops.addAll(Arrays.asList(operations));
+
         DbSetup setup = new DbSetup(new DataSourceDestination(dataSource),
-                Operations.sequenceOf(DELETE_ALL, operation));
+                Operations.sequenceOf(ops));
         TRACKER.launchIfNecessary(setup);
     }
 
@@ -53,15 +64,47 @@ public class LightDaoTest {
                 Insert.into("LIGHT")
                         .withDefaultValue("status", Light.Status.ON)
                         .columns("id", "level")
-                        .values(1L, 22)
+                        .values(1L, 22).build();
+        Operation noise =
+                Insert.into("NOISE")
+                        .withDefaultValue("status", Light.Status.ON)
+                        .columns("id", "level")
+                        .values(1L, 22).build();
+        Operation room =
+                Insert.into("ROOM")
+                        .columns("id", "light_id", "noise_id")
+                        .values(1L, 1L,1L).build();
+        Operation building =
+                Insert.into("BUILDING")
+                        .columns("id", "name")
+                        .values(1L, "TestBuilding")
                         .build();
-        dbSetup(light);
+        Operation building_r =
+                Insert.into("BUILDING_ROOMS")
+                        .columns("building_id", "room_id")
+                        .values(1L, 1L)
+                        .build();
+
+        dbSetup(light,noise,room,building);
     }
 
     @Test
     public void shouldFindOnLights() {
         TRACKER.skipNextLaunch();
-        assertEquals(1,lightDao.findOnLights().size());
+        assertEquals(1,buildingDao.listBuildingsLightOn().size());
+    }
+
+    @Test
+    public void shouldFindDetails() {
+        TRACKER.skipNextLaunch();
+        List<BuildingDetailDto> a = buildingDao.listBuildingsDetails();
+        assertEquals(1,buildingDao.listBuildingsDetails().size());
+    }
+
+    @Test
+    public void shouldFindAll() {
+        TRACKER.skipNextLaunch();
+        assertEquals(1,buildingDao.findAll().size());
     }
 
 
