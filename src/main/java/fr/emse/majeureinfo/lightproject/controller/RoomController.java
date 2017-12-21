@@ -1,8 +1,12 @@
 package fr.emse.majeureinfo.lightproject.controller;
 
+import fr.emse.majeureinfo.lightproject.LightProjectApplication;
 import fr.emse.majeureinfo.lightproject.dao.springdao.RoomDao;
 import fr.emse.majeureinfo.lightproject.dto.RoomDto;
+import fr.emse.majeureinfo.lightproject.model.Light;
 import fr.emse.majeureinfo.lightproject.model.Room;
+import fr.emse.majeureinfo.lightproject.mqtt_client.Subscriber;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,18 +39,33 @@ public class RoomController {
         return new RoomDto(roomDao.getOne(id));
     }
 
-    @PostMapping(value="/{id}/switch-light")
-    public List<RoomDto> switchLight(@PathVariable("id") Long id){
+    @PostMapping(value="/{id}/switch-light/all")
+    public List<RoomDto> switchLightReturnAll(@PathVariable("id") Long id) throws MqttException {
         List<Room> rooms = roomDao.findAll();
         findRoomWithId(rooms,id).switchLight();
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value="/{id}/switch-ringer")
-    public List<RoomDto> switchRinger(@PathVariable("id") Long id){
+    @PostMapping(value="/{id}/switch-light")
+    public RoomDto switchLight(@PathVariable("id") Long id) throws MqttException {
+        Room room = roomDao.findOne(id);
+        room.switchLight();
+        return new RoomDto(room);
+    }
+
+    @PostMapping(value="/{id}/switch-ringer/all")
+    public List<RoomDto> switchRingerReturnAll(@PathVariable("id") Long id) throws MqttException {
         List<Room> rooms = roomDao.findAll();
-        findRoomWithId(rooms,id).switchRinger();
+        Room room = findRoomWithId(rooms,id);
+        room.switchRinger();
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
+    }
+
+    @PostMapping(value="/{id}/switch-ringer")
+    public RoomDto switchRinger(@PathVariable("id") Long id) throws MqttException {
+        Room room = roomDao.findOne(id);
+        room.switchRinger();
+        return new RoomDto(room);
     }
 
     @GetMapping(value="/on")
