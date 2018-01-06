@@ -33,4 +33,5 @@ dependencies {
 	compile("com.heroku.sdk:heroku-jdbc:0.1.1")							// Simple free cloud API
 	compile ("org.hibernate:hibernate-core:5.2.8.Final")				//Criteria for queries
 	compile('org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0')	// MQTT client
+	
 }

@@ -75,4 +75,12 @@ public class Room {
                 break;
         }
     }
+
+    public void setLightLevel(int lightLevel){
+        light.setLevel(lightLevel);
+    }
+
+    public void setNoiseLevel(int noiseLevel){
+        noise.setLevel(noiseLevel);
+    }
 }

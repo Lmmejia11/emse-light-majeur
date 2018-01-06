@@ -8,4 +8,5 @@ import java.util.List;
 public interface BuildingDaoCustom {
     public List<BuildingDetailDto> listBuildingsDetails();
     public List<Building> listBuildingsLightOn();
+    public List<Long> listBuildingsIds();
 }

@@ -13,7 +13,6 @@ public class RoomDaoImpl implements RoomDaoCostom {
     @PersistenceContext
     private EntityManager em;
 
-
     @Override
     public List<Room> findWithOnLight() {
         //String jpql = "select rm from Room rm where rm.Light.status = :value";
@@ -21,6 +20,7 @@ public class RoomDaoImpl implements RoomDaoCostom {
         TypedQuery<Room> query = em.createQuery(jpql, Room.class);
         return query.setParameter("value", Light.Status.ON)
                 .getResultList();
-
     }
+
+
 }

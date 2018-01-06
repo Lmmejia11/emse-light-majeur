@@ -37,4 +37,11 @@ public class BuildingDaoImpl implements BuildingDaoCustom {
         return query.getResultList();
     }
 
+    public List<Long> listBuildingsIds() {
+
+        String jpql = "select bd.id from Building as bd";
+        TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+        return query.getResultList();
+    }
+
 }
