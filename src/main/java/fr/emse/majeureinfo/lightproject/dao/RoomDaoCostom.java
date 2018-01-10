@@ -8,4 +8,6 @@ public interface RoomDaoCostom {
 
     List<Room> findWithOnLight();
     List<Room> findWithOffLight();
+    List<Room> findWithOnRinger();
+    List<Room> findWithOffRinger();
 }
