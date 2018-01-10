@@ -1,5 +1,7 @@
 package fr.emse.majeureinfo.lightproject.model;
 
+import org.springframework.context.annotation.Bean;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -56,6 +58,9 @@ public class Light {
     }
 
     public static enum Status {
-        ON, OFF;
+        ON("ON"), OFF("OFF");
+
+        Status(String name) {
+        }
     }
 }
