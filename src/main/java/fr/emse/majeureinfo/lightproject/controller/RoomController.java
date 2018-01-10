@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
@@ -89,14 +90,14 @@ public class RoomController {
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value="/{id}/update-noiselevel/{light}")
+    @PostMapping(value="/{id}/update-noiselevel/{noise}")
     public RoomDto updateNoiseLevel(@PathVariable("id") Long id , @PathVariable("noise") Integer noiseLevel) throws MqttException {
         Room room = roomDao.findOne(id);
         room.setNoiseLevel(noiseLevel);
         return new RoomDto(room);
     }
 
-    @PostMapping(value="/{id}/update-noiselevel/{light}/all")
+    @PostMapping(value="/{id}/update-noiselevel/{noise}/all")
     public List<RoomDto> updateNoiseLevelReturnAll(@PathVariable("id") Long id , @PathVariable("noise") Integer noiseLevel) throws MqttException {
         List<Room> rooms = roomDao.findAll();
         Room room = findRoomWithId(rooms,id);
