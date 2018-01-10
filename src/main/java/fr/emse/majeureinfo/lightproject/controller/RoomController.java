@@ -40,14 +40,15 @@ public class RoomController {
         return new RoomDto(roomDao.getOne(id));
     }
 
-    @PostMapping(value="/{id}/switch-light/all")
-    public List<RoomDto> switchLightReturnAll(@PathVariable("id") Long id) throws MqttException {
+    @RequestMapping(value="/{id}/switch-light/all", method = RequestMethod.POST)
+    public List<RoomDto> switchLightReturnAll(@PathVariable("id") Long id, @RequestBody(required=false) String s) throws MqttException {
         List<Room> rooms = roomDao.findAll();
-        findRoomWithId(rooms,id).switchLight();
+        Room room = findRoomWithId(rooms,id);
+        if (s == null) room.switchLight();
+        else room.getLight().setStatus(Light.Status.valueOf(s));
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    //@PostMapping(value="/{id}/switch-light")
     @RequestMapping(value = "/{id}/switch-light", method = RequestMethod.POST)
     public RoomDto switchLight(@PathVariable("id") Long id, @RequestBody(required=false) String s) throws MqttException {
         Room room = roomDao.findOne(id);
@@ -56,18 +57,20 @@ public class RoomController {
         return new RoomDto(room);
     }
 
-    @PostMapping(value="/{id}/switch-ringer/all")
-    public List<RoomDto> switchRingerReturnAll(@PathVariable("id") Long id) throws MqttException {
+    @RequestMapping(value="/{id}/switch-ringer/all", method = RequestMethod.POST)
+    public List<RoomDto> switchRingerReturnAll(@PathVariable("id") Long id, @RequestBody(required=false) String s) throws MqttException {
         List<Room> rooms = roomDao.findAll();
         Room room = findRoomWithId(rooms,id);
-        room.switchRinger();
+        if (s == null) room.switchRinger();
+        else room.getNoise().setStatus(Light.Status.valueOf(s));
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value="/{id}/switch-ringer")
-    public RoomDto switchRinger(@PathVariable("id") Long id) throws MqttException {
+    @RequestMapping(value="/{id}/switch-ringer", method = RequestMethod.POST)
+    public RoomDto switchRinger(@PathVariable("id") Long id, @RequestBody(required=false) String s) throws MqttException {
         Room room = roomDao.findOne(id);
-        room.switchRinger();
+        if (s == null) room.switchRinger();
+        else room.getNoise().setStatus(Light.Status.valueOf(s));
         return new RoomDto(room);
     }
 
