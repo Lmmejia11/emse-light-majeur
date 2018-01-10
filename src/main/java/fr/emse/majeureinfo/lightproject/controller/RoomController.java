@@ -48,9 +48,10 @@ public class RoomController {
     }
 
     @PostMapping(value="/{id}/switch-light")
-    public RoomDto switchLight(@PathVariable("id") Long id) throws MqttException {
+    public RoomDto switchLight(@PathVariable("id") Long id, @RequestBody Light.Status s) throws MqttException {
         Room room = roomDao.findOne(id);
-        room.switchLight();
+        if (s == null) room.switchLight();
+        else room.getLight().setStatus(s);
         return new RoomDto(room);
     }
 
