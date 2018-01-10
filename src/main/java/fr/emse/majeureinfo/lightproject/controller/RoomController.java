@@ -47,11 +47,12 @@ public class RoomController {
         return rooms.stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value="/{id}/switch-light")
-    public RoomDto switchLight(@PathVariable("id") Long id, @RequestBody Light.Status s) throws MqttException {
+    //@PostMapping(value="/{id}/switch-light")
+    @RequestMapping(value = "/{id}/switch-light", method = RequestMethod.POST)
+    public RoomDto switchLight(@PathVariable("id") Long id, @RequestBody(required=false) String s) throws MqttException {
         Room room = roomDao.findOne(id);
         if (s == null) room.switchLight();
-        else room.getLight().setStatus(s);
+        else room.getLight().setStatus(Light.Status.valueOf(s));
         return new RoomDto(room);
     }
 
